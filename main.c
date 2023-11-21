@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define MEM_SIZE 30000
 
@@ -35,6 +36,50 @@ char *getfile(const char *path) {
     return code;
 }
 
+void loop(char memory[], char *ptr, char *code, unsigned int *i) {
+    while (code[*i]) {
+        switch (code[*i]) {
+            case '>':
+                ++ptr;
+                break;
+            case '<':
+                --ptr;
+                break;
+            case '+':
+                ++*ptr;
+                break;
+            case '-':
+                --*ptr;
+                break;
+            case '.':
+                write(1, ptr, 1);
+                break;
+            case ',':
+                *ptr = getchar();
+                break;
+            case ']':
+                if (*ptr) {
+                    unsigned int j = *i;
+                    while (code[j] != '[') {
+                        --j;
+                    }
+                    *i = j;
+                }
+                break;
+            case '[':
+                if (!*ptr) {
+                    unsigned int j = *i;
+                    while (code[j] != ']') {
+                        ++j;
+                    }
+                    *i = j;
+                }
+                break;
+        }
+        ++*i;
+    }
+}
+
 int main(int c, char **v) {
     if (c != 2) {
         fprintf(stderr, "Usage: %s <filename>\n", v[0]);
@@ -45,6 +90,9 @@ int main(int c, char **v) {
     char *ptr = &memmory[MEM_SIZE / 2];
 
     char *code = getfile(v[1]);
+    unsigned int i = 0;
+
+    loop(memmory, ptr, code, &i);
 
     free(code);
 }
