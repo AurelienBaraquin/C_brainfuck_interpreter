@@ -4,7 +4,7 @@ SRC = $(shell find . -name '*.c')
 
 OBJ = $(SRC:.c=.o)
 
-TARGET = brainfuck
+TARGET = compile
 
 all: $(TARGET)
 
