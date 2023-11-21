@@ -61,6 +61,10 @@ void loop(char memory[], char *ptr, char *code, unsigned int *i) {
                 if (*ptr) {
                     unsigned int j = *i;
                     while (code[j] != '[') {
+                        if (j == 0) {
+                            fprintf(stderr, "Error: unmatched brackets\n");
+                            return;
+                        }
                         --j;
                     }
                     *i = j;
