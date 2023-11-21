@@ -1,6 +1,6 @@
 CFLAGS = -W -Wall -Wextra -I./include -g3
 
-SRC = main.c
+SRC = $(shell find . -name '*.c')
 
 OBJ = $(SRC:.c=.o)
 
